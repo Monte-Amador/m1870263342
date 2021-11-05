@@ -25,11 +25,11 @@ Note that this is the default and expected output from the WordPress loop. The b
 
 ## Tests Using the Year Filter:
 
-- Sorting by the 2021 results in posts starting from **July 28, 2021** and then correctly displays the remaining posts in order. We are however specifically, we're missing the 3 most recent news items **Sept 21**, **Sept 09** and **August 10** **2021** posts respectively.
+- Sorting by the 2021 results in posts starting from **July 28, 2021** and then correctly displays the remaining posts in order. We are however specifically missing the 3 most recent news items **Sept 21**, **Sept 09** and **August 10** **2021** posts respectively.
 
 ## Test using the Search Query
 
-- as soon as the search field is used the example articles will disappear, even when you clear the search query. There is no way to see the original page unless you reload the page.
+- Running a search query such as the "fuel" or even "3-Billion" example continues to not show the 3 latest posts. When you return the search field to it's default blank field the same 3 latest posts continue to be missing. There is no way to see the original amount of posts on the page unless you reload the page manually.
 
 
 
