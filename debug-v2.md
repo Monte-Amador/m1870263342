@@ -4,13 +4,15 @@
 
 
 
-## Debugging the featured post Ajax requests.
+## Debugging the Ajax requests on the News Page
 
-Since we last met, I've move forward to provide a solution to the featured posts exclusion that we all three went over together last Friday. As I dove into to codebase to discover exactly what part needed to be adjusted, I discovered more inconsistencies along the way and have documented them here in hopes they can provide the path for us to the solution.  
+### Problem Context
+
+Since we last met, I've moved forward to provide a solution to the featured posts exclusion that all three of us went over together last Friday. As I dove into to codebase to discover exactly what part needed to be adjusted, I discovered more inconsistencies along the way and have documented them here in hopes they can provide the path for us to the solution.  
 
 Both search filters on the news and blog pages operate similarly and are therefore having the same problems with the featured posts exclusion code. This makes sense as they are both written out to operate similarly with the exception of the month and date added filters on the news page.
 
-Before I started working on the Featured Posts problem, I also wanted to find out if there were any patterns that would help point me to the right code block in the `custom-functions.php` file by running further tests on using the Ajax filter.
+Test 1 works as expected all the way through the final page load.
 
 ### Test 1: Initial Page Load Results
 
@@ -46,7 +48,6 @@ And finally:
 
 ```bash
 # Post dates on 2nd subsequent load more posts: Expected
-
 April 02
 March 30
 March 22
@@ -92,6 +93,8 @@ May 20
 ```
 This coincides with the meeting we held and points to the featured posts exclusion as the source of the bug. So to confirm this was the issue I continued loading more results to see how it would load:
 
+#### Inconsistent Output
+
 Clicking the load more button again, we get the last 3 queried from the previous page load duplicated:
 
 ```bash
@@ -118,61 +121,31 @@ Feb 02
 Jan 29
 Jan 22
 ```
-### Test 2 Results: 
-It's as if the block of code (lines 922-938 in `custom-functions.php`) that is in charge of showin and excluding the featured posts doesn't exist when any filter is applied. This would mean the query is just grabbing the initial 9 posts. The problem, it seems, is that the original standard query that runs when the page isn't loading the ajax initially, or subsequent view more loads, but therefore doesn't pick up the featured posts.
+### Test 2 Results: Here is the code block that seems to only work on initial page load and subsequent load-mores with no filtering
 
-So this follows in the comments from `custom-functions.php` as well, that same block of code gives us the correct output during page load and subsequent page loads but not for the filter. **Where is the filter block that works with featured images**?
+It's as if the block of code (lines 922-938 in `custom-functions.php`) that handles the showing and excluding of the featured posts doesn't exist when any filter is applied.
 
-***
+```php
+$the_offset = intval(9);
 
-## Featured Posts Exclusion Bug
-Going through our team's initial findings of having the featured posts declared on their parent pages `/news/` and `/blog/` respectively, gave us some insight into how the Ajax function hides them while returning results during the initial page load. However I ran some tests in order to isolate the problematic code by first confirming that everything would work as expected if there I simply removed the featured posts from the News page altogether. 
-
-Finally, to ensure these problems were only caused with the featured posts, I simply deleted all featured posts from the `/news/` parent page and returned to the filters/search on the news-events to see the results I was expecting.
-
-### Deleting Featured Posts: The unexpected Results
-
-```bash
-# Post Dates Loaded on Initial Page Load: Expected
-Nov 06
-Sept 21
-Sept 09
-Aug 10 
-July 28
-July 14
-July 12 
-July 07
-June 21
+  if ( ! empty( $featured_ids ) ) {
+    //only on initial page load
+    if ( true === $initial_load ) {
+      $IDS            = $featured_ids;
+      $posts_per_page = intval( 9 - $total_featured );
+      $post__not_in   = $exclude_featured_ids;
+    } else {
+      //only on subsequent load-mores w/ no filtering
+          $initial_posts_per_page = intval(9 - $total_featured);
+          $the_offset     = intval( $initial_posts_per_page + ( ($paged - 2) * $original_posts_per_page ) );
+      if ( empty( $query ) && empty( $topic ) ) {
+        if ( $paged > 1 ) {
+          $post__not_in = $exclude_featured_ids;
+        }
+      }
+    }
+  }
 ```
 
-After removing the 3 featured posts from the News page's ACF rows, the first 3 posts that are being displayed in their larger cards format are no longer the 'featured posts' but are in fact the 3 most recent. The posts are being loaded from the `initial page load` Ajax request.
+If a user supplies a filter (e.g. year) and the ajax query loads the results, it seems that is not being treated the same as an initial page load. **Is there a filter function similar to the initial page load and subsequent load-mores function that also includes/works with featured images**? 
 
-```bash
-# Post Dates Loaded on 1st subsequent page load: Expected
-June 04
-May 20 
-May 20 
-May 18 
-May 14
-May 11
-May 05
-May 03
-April 27
-```
-
-```bash
-# Post Dates Loaded on 2nd subsequent page load: Not Expected
-April 02 # duplicate from previous query
-May 20 # duplicate from previous query
-May 20 # duplicate from previous query
-May 18 # duplicate from previous query
-May 14 # duplicate from previous query
-May 11 # duplicate from previous query
-May 05 # duplicate from previous query
-May 03 # duplicate from previous query
-April 27 # duplicate from previous query
-```
-
-This continues in an endless loop of duplicate posts and we never actually get to anything earlier than April 02. 
-
-***
