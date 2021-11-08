@@ -67,7 +67,7 @@ Everything works as expected! Joy!
 
 ### Test 2: Isolating Ajax Filter
 
-Following the initial page load, we can deduce the expected results if you run a 'year' filter with a value of `2021` you expect to see posts as so:
+Following the initial page load results from Test 1, we can deduce the expected results if you run a 'year' filter with a value of `2021` you expect to see posts as so:
 
 ```bash
 Nov 06 #featured post
@@ -98,7 +98,7 @@ This coincides with the meeting we held and points to the featured posts exclusi
 
 #### Inconsistent Output
 
-Clicking the load more button again, we get the last 3 queried from the previous page load duplicated:
+However, clicking the load more button again, we get the last 3 queried posts from the previous page load duplicated:
 
 ```bash
 June 04 # duplicate from previous query
@@ -111,7 +111,7 @@ May 05
 May 03
 April 27
 ```
-For me, this was unexpected behavior that helped shed a little light into the query Ajax is delivering.. It seems the load more query doesn't count the last 3 posts from the previous query. My first inclination was that this was caused by something maybe in `the_offset` from the `custom-functions.php` file. However, *if you press load again the next sequence of 9 posts contain no duplicates from the last query:*
+For me, this was unexpected behavior that helped shed a little light into the query Ajax is delivering. It seems the load more query doesn't count the last 3 posts from the previous query. My first inclination was that this was caused by something maybe in `the_offset` from the `custom-functions.php` file. However, *if you press load again the next sequence of 9 posts contain no duplicates from the last query:*
 
 ```bash
 April 02
