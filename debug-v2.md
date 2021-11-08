@@ -58,11 +58,11 @@ February 02
 January 29
 January 22
 ```
-### Test 1 Results: everything works the way we expect to see.
+### Test 1 Results: Expected Results
 
 ***
 
-### Test 2: Understanding Ajax Filter Problem
+### Test 2: Isolating Ajax Filter
 
 Following the initial page load, we can deduce the expected results if you run a 'year' filter with a value of `2021` you expect to see posts as so:
 
@@ -108,7 +108,7 @@ May 05
 May 03
 April 27
 ```
-For me, this was unexpected behavior. It seems the load more query doesn't count the last 3 posts from the previous query. My first inclination was that this was caused by something maybe in `the_offset` from the `custom-functions.php` file. However, *if you press load again the next sequence of 9 posts contain no duplicates from the last query:*
+For me, this was unexpected behavior that helped shed a little light into the query Ajax is delivering.. It seems the load more query doesn't count the last 3 posts from the previous query. My first inclination was that this was caused by something maybe in `the_offset` from the `custom-functions.php` file. However, *if you press load again the next sequence of 9 posts contain no duplicates from the last query:*
 
 ```bash
 April 02
@@ -121,9 +121,9 @@ Feb 02
 Jan 29
 Jan 22
 ```
-### Test 2 Results: Here is the code block that seems to only work on initial page load and subsequent load-mores with no filtering
+### Test 2 Results: 
 
-It's as if the block of code (lines 922-938 in `custom-functions.php`) that handles the showing and excluding of the featured posts doesn't exist when any filter is applied.
+Here is the block of code (lines 922-938 in `custom-functions.php`) that seems to only work on initial page load and subsequent load-mores with no filtering - as stated in the code's comments. It's as if the  that handles the showing and excluding of the featured posts doesn't exist when any filter is applied.
 
 ```php
 $the_offset = intval(9);
@@ -147,5 +147,6 @@ $the_offset = intval(9);
   }
 ```
 
-If a user supplies a filter (e.g. year) and the ajax query loads the results, it seems that is not being treated the same as an initial page load. **Is there a filter function similar to the initial page load and subsequent load-mores function that also includes/works with featured images**? 
+If a user supplies a filter (e.g. year) and the ajax query loads the results, it seems that is not being treated the same as an initial page load. **Is there a filter function similar to the initial page load and subsequent load-mores function that also includes/works with featured images**? If this is true and If there isn't a filter function that handles the featured posts, then I think this code block is where the solution would need to be implemented. By adding a conditional for when the user uses a filter.
 
+This is the solution path I'm on at this moment. If after considering this you think it's the right path, I can set out to take a stab at writing the conditional and inserting it but more than anything I wanted to communicate what I've tested and come to understand. 
