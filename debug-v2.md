@@ -60,6 +60,8 @@ January 22
 ```
 ### Test 1 Results: Expected Results
 
+Everything works as expected! Joy!
+
 ***
 
 ### Test 2: Isolating Ajax Filter
