@@ -4,13 +4,13 @@
 
 
 
-## Debugging the Ajax requests on the News Page
+## Debugging Ajax requests: News Page
 
 ### Problem Context
 
 Since we last met, I've moved forward to provide a solution to the featured posts exclusion that all three of us went over together last Friday. As I dove into to codebase to discover exactly what part needed to be adjusted, I discovered more inconsistencies along the way and have documented them here in hopes they can provide the path for us to the solution.  
 
-Both search filters on the news and blog pages operate similarly and are therefore having the same problems with the featured posts exclusion code. This makes sense as they are both written out to operate similarly with the exception of the month and date added filters on the news page.
+*Both search filters on the news and blog pages operate similarly and are therefore having the same problems with the featured posts exclusion code*. This makes sense as they are both written out to operate similarly with the exception of the month and date added filters on the news page.
 
 Test 1 works as expected all the way through the final page load.
 
