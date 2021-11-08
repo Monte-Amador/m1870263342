@@ -121,7 +121,7 @@ Feb 02
 Jan 29
 Jan 22
 ```
-### Test 2 Results: 
+### Test 2 Results: Buggy Behavior
 
 Here is the block of code (lines 922-938 in `custom-functions.php`) that seems to only work on initial page load and subsequent load-mores with no filtering - as stated in the code's comments. It's as if the  that handles the showing and excluding of the featured posts doesn't exist when any filter is applied.
 
@@ -146,7 +146,7 @@ $the_offset = intval(9);
     }
   }
 ```
-
+#### Wrapping Up
 If a user supplies a filter (e.g. year) and the ajax query loads the results, it seems that is not being treated the same as an initial page load. **Is there a filter function similar to the initial page load and subsequent load-mores function that also includes/works with featured images**? If this is true and If there isn't a filter function that handles the featured posts, then I think this code block is where the solution would need to be implemented. By adding a conditional for when the user uses a filter.
 
 This is the solution path I'm on at this moment. If after considering this you think it's the right path, I can set out to take a stab at writing the conditional and inserting it but more than anything I wanted to communicate what I've tested and come to understand. 
