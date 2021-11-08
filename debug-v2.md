@@ -12,7 +12,8 @@ Since we last met, I've moved forward to provide a solution to the featured post
 
 *Both search filters on the news and blog pages operate similarly and are therefore having the same problems with the featured posts exclusion code*. This makes sense as they are both written out to operate similarly with the exception of the month and date added filters on the news page.
 
-Test 1 works as expected all the way through the final page load.
+Test 1 works as expected but I leave the results here for data. 
+Skip to [Test 2](test-2-isolating-ajax-filter) to see the buggy unexpected behavior and the code block I am focusing on as well as a potential solution.
 
 ### Test 1: Initial Page Load Results
 
